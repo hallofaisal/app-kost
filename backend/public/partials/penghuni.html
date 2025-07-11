@@ -1,0 +1,123 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Data Penghuni</h4>
+  <button class="btn btn-primary" id="btn-add-penghuni">Tambah Penghuni</button>
+</div>
+<table class="table table-bordered table-striped" id="table-penghuni" style="width:100%">
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>No KTP</th>
+      <th>No HP</th>
+      <th>Tgl Masuk</th>
+      <th>Tgl Keluar</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+<!-- Modal Form Penghuni -->
+<div class="modal fade" id="modalPenghuni" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="form-penghuni">
+        <div class="modal-header">
+          <h5 class="modal-title">Form Penghuni</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id" id="penghuni-id">
+          <div class="mb-2">
+            <label>Nama</label>
+            <input type="text" class="form-control" name="nama" required>
+          </div>
+          <div class="mb-2">
+            <label>No KTP</label>
+            <input type="text" class="form-control" name="no_ktp" required maxlength="16">
+          </div>
+          <div class="mb-2">
+            <label>No HP</label>
+            <input type="text" class="form-control" name="no_hp" required>
+          </div>
+          <div class="mb-2">
+            <label>Tgl Masuk</label>
+            <input type="date" class="form-control" name="tgl_masuk" required>
+          </div>
+          <div class="mb-2">
+            <label>Tgl Keluar</label>
+            <input type="date" class="form-control" name="tgl_keluar">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Simpan</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+function renderPenghuni() {
+  const table = $('#table-penghuni').DataTable({
+    ajax: {
+      url: '/api/penghuni',
+      dataSrc: ''
+    },
+    destroy: true,
+    columns: [
+      {data:'nama'},
+      {data:'no_ktp'},
+      {data:'no_hp'},
+      {data:'tgl_masuk'},
+      {data:'tgl_keluar'},
+      {data:null, render: function(data,type,row){
+        return `<button class='btn btn-sm btn-info me-1 btn-edit'>Edit</button>
+                <button class='btn btn-sm btn-danger btn-delete'>Hapus</button>`;
+      }}
+    ]
+  });
+  // Tambah
+  $('#btn-add-penghuni').off('click').on('click',function(){
+    $('#form-penghuni')[0].reset();
+    $('#penghuni-id').val('');
+    $('#modalPenghuni').modal('show');
+  });
+  // Edit
+  $('#table-penghuni tbody').off('click').on('click','.btn-edit',function(){
+    const data = table.row($(this).parents('tr')).data();
+    $('#penghuni-id').val(data.id);
+    $('#form-penghuni [name=nama]').val(data.nama);
+    $('#form-penghuni [name=no_ktp]').val(data.no_ktp);
+    $('#form-penghuni [name=no_hp]').val(data.no_hp);
+    $('#form-penghuni [name=tgl_masuk]').val(data.tgl_masuk);
+    $('#form-penghuni [name=tgl_keluar]').val(data.tgl_keluar);
+    $('#modalPenghuni').modal('show');
+  });
+  // Hapus
+  $('#table-penghuni tbody').off('click').on('click','.btn-delete',function(){
+    const data = table.row($(this).parents('tr')).data();
+    if(confirm('Yakin hapus data?')){
+      $.ajax({url:'/api/penghuni/'+data.id,type:'DELETE',success:function(){table.ajax.reload();}});
+    }
+  });
+  // Submit Form
+  $('#form-penghuni').off('submit').on('submit',function(e){
+    e.preventDefault();
+    const id = $('#penghuni-id').val();
+    const method = id ? 'PUT' : 'POST';
+    const url = id ? '/api/penghuni/'+id : '/api/penghuni';
+    $.ajax({
+      url:url,
+      type:method,
+      contentType:'application/json',
+      data:JSON.stringify(Object.fromEntries(new FormData(this))),
+      success:function(){
+        $('#modalPenghuni').modal('hide');
+        table.ajax.reload();
+      },
+      error:function(xhr){
+        alert(xhr.responseJSON?.error||'Gagal simpan data');
+      }
+    });
+  });
+}
+</script> 

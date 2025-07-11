@@ -1,0 +1,58 @@
+<div class="row mb-4">
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-primary h-100">
+      <div class="card-body">
+        <h6 class="card-title">Total Penghuni Aktif</h6>
+        <h2 id="card-total-penghuni">0</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-success h-100">
+      <div class="card-body">
+        <h6 class="card-title">Kamar Kosong</h6>
+        <h2 id="card-kamar-kosong">0</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-warning h-100">
+      <div class="card-body">
+        <h6 class="card-title">Tagihan Belum Lunas</h6>
+        <h2 id="card-tagihan-belum-lunas">0</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div class="card text-bg-info h-100">
+      <div class="card-body">
+        <h6 class="card-title">Pendapatan Bulan Ini</h6>
+        <h2 id="card-pendapatan-bulan">Rp0</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<canvas id="chart-occupancy" height="40" style="max-width:300px;display:block;margin:0 auto;"></canvas>
+<script>
+function renderDashboard() {
+  // TODO: Ganti AJAX ke endpoint backend
+  $('#card-total-penghuni').text('12');
+  $('#card-kamar-kosong').text('5');
+  $('#card-tagihan-belum-lunas').text('3');
+  $('#card-pendapatan-bulan').text('Rp2.500.000');
+  // Chart.js Occupancy
+  if(window.occupancyChart) window.occupancyChart.destroy();
+  const ctx = document.getElementById('chart-occupancy').getContext('2d');
+  window.occupancyChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Terisi', 'Kosong'],
+      datasets: [{
+        data: [7, 5],
+        backgroundColor: ['#0d6efd', '#20c997']
+      }]
+    },
+    options: {responsive:true, plugins:{legend:{position:'bottom'}}, cutout:'70%'}
+  });
+}
+</script> 
