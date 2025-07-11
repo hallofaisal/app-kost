@@ -14,6 +14,12 @@ if (preg_match('#^/api/penghuni#', $uri)) {
     $controller->handle($method, $uri);
     exit;
 }
+if (preg_match('#^/api/bayar#', $uri)) {
+    require_once __DIR__ . '/../controllers/BayarController.php';
+    $controller = new BayarController($pdo);
+    $controller->handle($method, $uri);
+    exit;
+}
 // ... endpoint lain akan ditambahkan di sini
 
 http_response_code(404);
