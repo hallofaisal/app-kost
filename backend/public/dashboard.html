@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin Kos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <style>
+        body { background: #f8f9fa; }
+        .card { min-height: 120px; }
+        .nav-link.active { font-weight: bold; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Admin Kos</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="#dashboard" id="nav-dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#penghuni" id="nav-penghuni">Penghuni</a></li>
+        <li class="nav-item"><a class="nav-link" href="#kamar" id="nav-kamar">Kamar</a></li>
+        <li class="nav-item"><a class="nav-link" href="#barang" id="nav-barang">Barang</a></li>
+        <li class="nav-item"><a class="nav-link" href="#assign" id="nav-assign">Assign Kamar</a></li>
+        <li class="nav-item"><a class="nav-link" href="#tagihan" id="nav-tagihan">Tagihan</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pembayaran" id="nav-pembayaran">Pembayaran</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container mb-4" id="main-content">
+    <!-- Konten dinamis akan di-load di sini -->
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Navigasi dan load konten dinamis
+function loadContent(hash) {
+    switch(hash) {
+        case '#dashboard':
+        case '':
+            $('#main-content').load('partials/dashboard_cards.html', renderDashboard);
+            break;
+        case '#penghuni':
+            $('#main-content').load('partials/penghuni.html', renderPenghuni);
+            break;
+        case '#kamar':
+            $('#main-content').load('partials/kamar.html', renderKamar);
+            break;
+        case '#barang':
+            $('#main-content').load('partials/barang.html', renderBarang);
+            break;
+        case '#assign':
+            $('#main-content').load('partials/assign.html', renderAssign);
+            break;
+        case '#tagihan':
+            $('#main-content').load('partials/tagihan.html', renderTagihan);
+            break;
+        case '#pembayaran':
+            $('#main-content').load('partials/pembayaran.html', renderPembayaran);
+            break;
+        default:
+            $('#main-content').html('<div class="alert alert-warning">Menu tidak ditemukan.</div>');
+    }
+}
+
+$(window).on('hashchange', function() {
+    loadContent(window.location.hash);
+    $('.nav-link').removeClass('active');
+    $("a[href='"+window.location.hash+"']").addClass('active');
+});
+$(document).ready(function() {
+    loadContent(window.location.hash);
+    $('.nav-link').on('click', function() {
+        $('.nav-link').removeClass('active');
+        $(this).addClass('active');
+    });
+});
+
+// Placeholder fungsi render, akan diisi AJAX dan DataTables
+function renderDashboard() {}
+function renderPenghuni() {}
+function renderKamar() {}
+function renderBarang() {}
+function renderAssign() {}
+function renderTagihan() {}
+function renderPembayaran() {}
+</script>
+</body>
+</html> 
