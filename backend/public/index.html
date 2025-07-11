@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kos Modern - Selamat Datang</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    body { background: #f6f8fa; }
+    .hero {
+      background: linear-gradient(120deg, #4f8cff 0%, #6ee7b7 100%);
+      color: #fff;
+      padding: 60px 0 40px 0;
+      text-align: center;
+    }
+    .hero h1 { font-size: 2.5rem; font-weight: bold; }
+    .hero p { font-size: 1.2rem; }
+    .cta-btn { font-size: 1.1rem; margin-top: 20px; }
+    .kamar-card { transition: box-shadow .2s; border-radius: 1rem; }
+    .kamar-card:hover { box-shadow: 0 4px 24px rgba(79,140,255,0.15); }
+    .reminder-h3 { color: #ff9800; font-weight: bold; }
+    .reminder-late { background: #ffeaea; color: #d32f2f; font-weight: bold; border-radius: 8px; }
+    .reminder-soon { background: #fffbe7; color: #ff9800; border-radius: 8px; }
+    .loading-spinner { display: flex; justify-content: center; align-items: center; height: 200px; }
+    html { scroll-behavior: smooth; }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Animation -->
+  <div id="loading" class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content" style="display:none;">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1>Kos Modern Sejahtera</h1>
+        <p>Hunian nyaman, aman, dan strategis di pusat kota. Tersedia kamar dengan fasilitas lengkap dan harga terjangkau.</p>
+        <a href="#kamar-kosong" class="btn btn-light cta-btn">Lihat Kamar Kosong</a>
+      </div>
+    </section>
+
+    <!-- Info Kamar Kosong -->
+    <section id="kamar-kosong" class="py-5">
+      <div class="container">
+        <h2 class="mb-4 text-center">Kamar Kosong Tersedia</h2>
+        <div class="row" id="kamar-list">
+          <!-- Kamar cards akan diisi via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Reminder Section -->
+    <section class="py-4">
+      <div class="container">
+        <h2 class="mb-3 text-center">Reminder Pembayaran</h2>
+        <div class="row" id="reminder-list">
+          <!-- Reminder cards akan diisi via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Kontak Section -->
+    <section class="py-5 bg-white">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <h3>Kontak Pengelola</h3>
+            <p><strong>Telepon:</strong> <a href="tel:081234567890">0812-3456-7890</a></p>
+            <p><strong>Alamat:</strong> Jl. Mawar No. 123, Bandung</p>
+          </div>
+          <div class="col-md-6">
+            <iframe src="https://www.google.com/maps?q=-6.914744,107.609810&z=15&output=embed" width="100%" height="220" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Loading animation
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+      }, 800); // Simulasi loading
+    });
+
+    // Smooth scroll untuk CTA
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('a[href^="#"]')) {
+        var target = document.querySelector(e.target.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+
+    // Dummy data kamar kosong (ganti dengan AJAX ke backend jika sudah siap)
+    const kamarKosong = [
+      { nomor: 'A1', harga: 1000000, fasilitas: ['AC', 'Kamar Mandi Dalam', 'WiFi'] },
+      { nomor: 'B2', harga: 950000, fasilitas: ['Kipas Angin', 'Kamar Mandi Luar', 'WiFi'] },
+      { nomor: 'C3', harga: 1200000, fasilitas: ['AC', 'Meja Belajar', 'TV'] }
+    ];
+    function renderKamarKosong() {
+      const list = document.getElementById('kamar-list');
+      list.innerHTML = '';
+      kamarKosong.forEach(kamar => {
+        list.innerHTML += `
+          <div class="col-md-4 mb-4">
+            <div class="card kamar-card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title">Kamar ${kamar.nomor}</h5>
+                <p class="card-text mb-1"><strong>Harga:</strong> Rp${kamar.harga.toLocaleString('id-ID')}/bulan</p>
+                <p class="card-text mb-1"><strong>Fasilitas:</strong> ${kamar.fasilitas.join(', ')}</p>
+                <a href="#kontak" class="btn btn-primary btn-sm mt-2">Tanya Kamar Ini</a>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+    // Dummy data reminder (ganti dengan AJAX ke backend jika sudah siap)
+    const reminderData = [
+      { nomor: 'A2', nama: 'Budi', status: 'soon', tgl_jatuh_tempo: '2024-07-14' },
+      { nomor: 'B1', nama: 'Siti', status: 'late', tgl_jatuh_tempo: '2024-07-10' }
+    ];
+    function renderReminder() {
+      const list = document.getElementById('reminder-list');
+      list.innerHTML = '';
+      reminderData.forEach(item => {
+        let cls = item.status === 'late' ? 'reminder-late' : 'reminder-soon';
+        let label = item.status === 'late' ? 'Terlambat Bayar' : 'Jatuh Tempo H-3';
+        list.innerHTML += `
+          <div class="col-md-6 mb-3">
+            <div class="p-3 ${cls}">
+              <div><strong>Kamar ${item.nomor}</strong> - ${item.nama}</div>
+              <div>${label} (${item.tgl_jatuh_tempo})</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      renderKamarKosong();
+      renderReminder();
+    });
+  </script>
+</body>
+</html> 
